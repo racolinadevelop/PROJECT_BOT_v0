@@ -1,1 +1,101 @@
-node_modules
+# ============================
+# Node / Next.js
+# ============================
+
+# Dependencias
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output de Next.js
+.next/
+out/
+dist/
+.cache/
+.next-static/
+.next-turbo/
+.vercel/
+
+# Archivos de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos temporales del editor
+*.tsbuildinfo
+*.eslintcache
+*.cache-loader
+*.tmp
+*.bak
+*.orig
+
+# ============================
+# Git y versiones
+# ============================
+
+# Ignorar backups o configuraciones
+*.tgz
+*.tar.gz
+*.zip
+
+# ============================
+# Proyecto específico
+# ============================
+
+# Carpeta de sesiones / uploads (si la usas)
+uploads/
+sessions/
+tokens/
+_sessions/
+_tokens/
+
+# Archivos generados por builderbot o chatbot
+*.wwebjs*
+*.sqlite
+*.db
+
+# Archivos locales de herramientas
+*.local
+*.lockb
+*.env.example.local
+
+# ============================
+# OS específicos
+# ============================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ============================
+# Final
+# ============================
+
+# Evitar errores si se usa vercel
+.vercel/
