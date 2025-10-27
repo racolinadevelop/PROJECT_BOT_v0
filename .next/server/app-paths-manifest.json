@@ -1,4 +1,5 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/(storefront)/tienda-de-ventas/[slug]/page": "app/(storefront)/tienda-de-ventas/[slug]/page.js",
   "/(storefront)/[branch]/page": "app/(storefront)/[branch]/page.js"
 }

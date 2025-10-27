@@ -1,16 +1,35 @@
-export type Currency = 'USD' | 'EUR' | 'VES' | 'MXN';
+// lib/types.ts
+export type Currency = 'USD' | 'EUR' | 'MXN' | string;
 
 export interface Product {
   id: string;
-  branchId: string;
+  slug: string;                 // ← importante para la página /[slug]
   name: string;
-  slug: string;
   description?: string;
+  imageUrl?: string;
   priceCents: number;
   currency: Currency;
-  imageUrl?: string;
-  isActive: boolean;
   category?: string;
+}
+
+export interface OptionItem {
+  id: string;
+  name: string;
+  unitPriceCents?: number;
+}
+
+export interface OptionGroup {
+  id: string;
+  title: string;
+  type: 'stepper';
+  min?: number;
+  max?: number;
+  freeMax?: number;
+  items: OptionItem[];
+}
+
+export interface ProductWithOptions extends Product {
+  optionGroups?: OptionGroup[];
 }
 
 export interface CartItem {
@@ -20,6 +39,14 @@ export interface CartItem {
   unitPriceCents: number;
   currency: Currency;
   imageUrl?: string;
-   description?: string;
+  description?: string;
+  selections?: {
+    groupId: string;
+    items: { id: string; name: string; qty: number; unitPriceCents?: number }[];
+  }[];
+  note?: string;
+  // opcional: si quieres reabrir con reglas desde el carrito
+  slug?: string;
+  options?: Record<string, string>;
 }
 
