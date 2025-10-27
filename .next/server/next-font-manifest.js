@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/ramonacolinarodriguez/Desktop/Projects/project_bot/bot_template_frontend/app/layout\":[\"static/media/eafabf029ad39a43-s.p.woff2\",\"static/media/0484562807a97172-s.p.woff2\",\"static/media/7db6c35d839a711c-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
