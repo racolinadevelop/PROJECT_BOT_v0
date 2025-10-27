@@ -4,13 +4,23 @@ import { Button } from '@/components/ui/button';
 import { Product } from '@/lib/types';
 import { formatMoney } from '@/lib/currency';
 import { useCart } from '@/store/cart';
+import ProductQuickView from '@/components/ProductQuickView';
+import { useState } from 'react';
+
+
 
 export default function ProductListItem({ product }: { product: Product }) {
   const add = useCart(s => s.add);
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="flex gap-3 p-3 rounded-2xl bg-white dark:bg-zinc-900 border shadow-soft">
       {product.imageUrl && (
-        <div className="relative w-[110px] h-[110px] shrink-0 overflow-hidden rounded-xl">
+        <div
+          className="relative w-[110px] h-[110px] shrink-0 overflow-hidden rounded-xl cursor-zoom-in"
+          onClick={() => setOpen(true)}
+          title="Ver detalle"
+        >
           <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
         </div>
       )}
@@ -28,12 +38,27 @@ export default function ProductListItem({ product }: { product: Product }) {
               qty: 1,
               unitPriceCents: product.priceCents,
               currency: product.currency,
+              imageUrl: product.imageUrl,
+              description: product.description,
             })
           }
           className="w-11 h-11 rounded-full bg-white dark:bg-zinc-800 border shadow-soft flex items-center justify-center text-xl"
           title="Agregar"
         >+</button>
       </div>
+      <ProductQuickView
+        open={open}
+        onClose={() => setOpen(false)}
+        product={{
+          name: product.name,
+          imageUrl: product.imageUrl,
+          description: product.description,
+        }}
+      />
     </div>
+
+
   );
+
+
 }

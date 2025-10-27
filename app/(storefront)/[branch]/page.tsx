@@ -36,7 +36,7 @@ export default function BranchPage({ params }: { params: { branch: string } }) {
         <div className="flex items-center justify-between gap-3 mb-3">
           <div className="font-semibold">Tienda: <span className="opacity-80">{params.branch}</span></div>
         </div>
-        <SearchBar onSearch={(term) => setQ(term)} />
+        <SearchBar onSearch={(term) => setQ(term)} minLength={2} />
         <div className="mt-3">
           <CategoryTabs tabs={tabs} active={active} onChange={setActive} />
         </div>

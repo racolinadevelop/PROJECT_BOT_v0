@@ -7,6 +7,7 @@ type CartState = {
   remove: (productId: string) => void;
   clear: () => void;
   totalCents: () => number;
+  setQty: (productId: string, qty: number) => void;
 };
 
 export const useCart = create<CartState>((set, get) => ({
@@ -26,4 +27,10 @@ export const useCart = create<CartState>((set, get) => ({
   remove: (productId) => set((state) => ({ items: state.items.filter(i => i.productId !== productId) })),
   clear: () => set({ items: [] }),
   totalCents: () => get().items.reduce((acc, i) => acc + i.unitPriceCents * i.qty, 0),
+  setQty: (productId, qty) =>
+    set((state) => ({
+      items: state.items
+        .map(i => i.productId === productId ? { ...i, qty } : i)
+        .filter(i => i.qty > 0)
+    })),
 }));

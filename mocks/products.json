@@ -1,10 +1,10 @@
 [
   {
-    "id": "promo1",
+    "id": "promo-triple-pizza",
     "branchId": "tienda-de-ventas",
     "name": "Triple Pizza (3 medianas + Pepsi)",
     "slug": "promo-triple-pizza",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 1199,
     "currency": "USD",
     "imageUrl": "/images/promo-triple-pizza.webp",
@@ -12,11 +12,11 @@
     "category": "Promociones"
   },
   {
-    "id": "promo2",
+    "id": "promo-mediana-agrandada-xl-1",
     "branchId": "tienda-de-ventas",
     "name": "Mediana Agrandada XL (4 ingredientes)",
     "slug": "promo-mediana-agrandada-xl-1",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 499,
     "currency": "USD",
     "imageUrl": "/images/promo-mediana-agrandada-xl-1.webp",
@@ -24,11 +24,11 @@
     "category": "Promociones"
   },
   {
-    "id": "promo3",
+    "id": "promo-buenazooo-4medianas",
     "branchId": "tienda-de-ventas",
     "name": "Combo Buenazooo!! (4 medianas + 2 Pepsi + pan de ajo)",
     "slug": "promo-buenazooo-4medianas",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 1999,
     "currency": "USD",
     "imageUrl": "/images/promo-buenazooo-4medianas.webp",
@@ -36,11 +36,11 @@
     "category": "Promociones"
   },
   {
-    "id": "promo4",
+    "id": "promo-mediana-agrandada-xl-2",
     "branchId": "tienda-de-ventas",
     "name": "Mediana Agrandada XL (varios sabores)",
     "slug": "promo-mediana-agrandada-xl-2",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 1999,
     "currency": "USD",
     "imageUrl": "/images/promo-mediana-agrandada-xl-2.webp",
@@ -48,11 +48,11 @@
     "category": "Promociones"
   },
   {
-    "id": "promo5",
+    "id": "promo-2x-mediana-xl",
     "branchId": "tienda-de-ventas",
     "name": "2 Medianas XL (32cm) – 4 ingredientes",
     "slug": "promo-2x-mediana-xl",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 999,
     "currency": "USD",
     "imageUrl": "/images/promo-2x-mediana-xl.webp",
@@ -60,11 +60,11 @@
     "category": "Promociones"
   },
   {
-    "id": "promo6",
+    "id": "promo-mediana-especial",
     "branchId": "tienda-de-ventas",
     "name": "Mediana Especial (25cm) + Pepsi 1L",
     "slug": "promo-mediana-especial",
-    "description": "Promoción destacada",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 799,
     "currency": "USD",
     "imageUrl": "/images/promo-mediana-especial.webp",
@@ -72,27 +72,123 @@
     "category": "Promociones"
   },
   {
-    "id": "pz1",
+    "id": "caribena",
     "branchId": "tienda-de-ventas",
-    "name": "Pizza Margarita",
-    "slug": "pizza-margarita",
-    "description": "Tomate, mozzarella, albahaca fresca",
+    "name": "Pizza Caribeña",
+    "slug": "caribena",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 899,
     "currency": "USD",
-    "imageUrl": "/images/margarita.png",
+    "imageUrl": "/images/caribena.webp",
     "isActive": true,
-    "category": "Pizzas"
+    "category": "Pizzas Dulces"
   },
   {
-    "id": "pz2",
+    "id": "d-camarones",
     "branchId": "tienda-de-ventas",
-    "name": "Pepperoni",
-    "slug": "pepperoni",
-    "description": "Queso y pepperoni crujiente",
+    "name": "D’ Camarones",
+    "slug": "d-camarones",
+    "description": "Importado desde bundle de imágenes",
     "priceCents": 1099,
     "currency": "USD",
-    "imageUrl": "/images/pepperoni.png",
+    "imageUrl": "/images/d-camarones.webp",
     "isActive": true,
-    "category": "Pizzas"
+    "category": "Pizzas Mariscos"
+  },
+  {
+    "id": "camaron-campestre",
+    "branchId": "tienda-de-ventas",
+    "name": "Camarón Campestre",
+    "slug": "camaron-campestre",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 1199,
+    "currency": "USD",
+    "imageUrl": "/images/camaron-campestre.webp",
+    "isActive": true,
+    "category": "Pizzas Mariscos"
+  },
+  {
+    "id": "camaron-bacon",
+    "branchId": "tienda-de-ventas",
+    "name": "Camarón Bacon",
+    "slug": "camaron-bacon",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 1199,
+    "currency": "USD",
+    "imageUrl": "/images/camaron-bacon.webp",
+    "isActive": true,
+    "category": "Pizzas Mariscos"
+  },
+  {
+    "id": "bbq-pina",
+    "branchId": "tienda-de-ventas",
+    "name": "BBQ Piña",
+    "slug": "bbq-pina",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 999,
+    "currency": "USD",
+    "imageUrl": "/images/bbq-pina.webp",
+    "isActive": true,
+    "category": "Pizzas BBQ"
+  },
+  {
+    "id": "arma-pizza-familiar-6",
+    "branchId": "tienda-de-ventas",
+    "name": "Arma Pizza Familiar (6 ingredientes)",
+    "slug": "arma-pizza-familiar-6",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 1499,
+    "currency": "USD",
+    "imageUrl": "/images/arma-pizza-familiar.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "hat-trick-3-familiares",
+    "branchId": "tienda-de-ventas",
+    "name": "Hat Trick (3 familiares + extras)",
+    "slug": "hat-trick-3-familiares",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 2799,
+    "currency": "USD",
+    "imageUrl": "/images/hat-trick.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "cuatro-medianas",
+    "branchId": "tienda-de-ventas",
+    "name": "Combo 4 Medianas",
+    "slug": "cuatro-medianas",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 2499,
+    "currency": "USD",
+    "imageUrl": "/images/cuatro-medianas.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "cuatro-familiares",
+    "branchId": "tienda-de-ventas",
+    "name": "Combo 4 Familiares",
+    "slug": "cuatro-familiares",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 3999,
+    "currency": "USD",
+    "imageUrl": "/images/cuatro-familiares.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "dos-pizzas-familiares",
+    "branchId": "tienda-de-ventas",
+    "name": "2 Pizzas Familiares",
+    "slug": "dos-pizzas-familiares",
+    "description": "Importado desde bundle de imágenes",
+    "priceCents": 2299,
+    "currency": "USD",
+    "imageUrl": "/images/dos-pizzas-familiares.webp",
+    "isActive": true,
+    "category": "Promociones"
   }
 ]
