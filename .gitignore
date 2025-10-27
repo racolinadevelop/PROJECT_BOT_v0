@@ -50,31 +50,41 @@ Thumbs.db
 # Git y versiones
 # ============================
 
-# Ignorar backups o configuraciones
 *.tgz
 *.tar.gz
 *.zip
 
 # ============================
-# Proyecto específico
+# Proyecto específico (Bot Template)
 # ============================
 
-# Carpeta de sesiones / uploads (si la usas)
+# Archivos de sesión, tokens y DB temporales
 uploads/
 sessions/
 tokens/
 _sessions/
 _tokens/
-
-# Archivos generados por builderbot o chatbot
-*.wwebjs*
 *.sqlite
 *.db
-
-# Archivos locales de herramientas
-*.local
+*.wwebjs*
 *.lockb
-*.env.example.local
+
+# Ignorar los bundles de imágenes o productos generados
+public/images/
+public/tmp/
+mocks/products.json
+mocks/*.json
+
+# Ignorar scripts temporales de integración o pruebas
+scripts_dev/
+__tests__/
+test_output/
+
+# Ignorar configuraciones locales
+.env.example.local
+.local/
+cache/
+logs/
 
 # ============================
 # OS específicos
@@ -97,5 +107,5 @@ Desktop.ini
 # Final
 # ============================
 
-# Evitar errores si se usa vercel
+# VerceI / deployment cache
 .vercel/
