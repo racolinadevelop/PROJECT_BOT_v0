@@ -1,4 +1,3 @@
-
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { getProductsByBranch } from '@/lib/api';
@@ -19,9 +18,9 @@ export default function BranchPage({ params }: { params: { branch: string } }) {
   }, [params.branch]);
 
   const tabs = useMemo(() => {
-    const set = new Set<string>();
-    products.forEach(p => set.add(p.category || 'General'));
-    return Array.from(set);
+    const s = new Set<string>();
+    products.forEach(p => s.add(p.category || 'General'));
+    return Array.from(s);
   }, [products]);
 
   const filtered = useMemo(() => {

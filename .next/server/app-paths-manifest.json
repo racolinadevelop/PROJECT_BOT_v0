@@ -1,0 +1,3 @@
+{
+  "/(storefront)/[branch]/page": "app/(storefront)/[branch]/page.js"
+}

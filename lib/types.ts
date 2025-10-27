@@ -10,7 +10,7 @@ export interface Product {
   currency: Currency;
   imageUrl?: string;
   isActive: boolean;
-  category?: string;
+  category?: string; // 👈 nuevo
 }
 
 export interface CartItem {

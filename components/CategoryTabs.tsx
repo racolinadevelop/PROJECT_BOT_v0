@@ -1,8 +1,11 @@
-
 'use client';
 import clsx from 'clsx';
 
-export default function CategoryTabs({ tabs, active = 0, onChange }: { tabs: string[]; active?: number; onChange: (i: number) => void }) {
+export default function CategoryTabs({
+  tabs,
+  active = 0,
+  onChange,
+}: { tabs: string[]; active?: number; onChange: (i: number) => void }) {
   return (
     <div className="grid grid-cols-3 gap-2 text-sm">
       {tabs.map((t, i) => (
