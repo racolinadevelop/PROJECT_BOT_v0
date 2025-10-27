@@ -1,0 +1,18 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fff7ed; /* crema cálido */
+  --foreground: #0b0b0b;
+}
+.dark {
+  --background: #0a0a0a;
+  --foreground: #e5e7eb;
+}
+
+a { text-decoration: none; }
+
+/* utilities */
+.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}

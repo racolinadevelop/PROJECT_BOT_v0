@@ -1,0 +1,98 @@
+[
+  {
+    "id": "promo1",
+    "branchId": "tienda-de-ventas",
+    "name": "Triple Pizza (3 medianas + Pepsi)",
+    "slug": "promo-triple-pizza",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 1199,
+    "currency": "USD",
+    "imageUrl": "/images/promo-triple-pizza.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "promo2",
+    "branchId": "tienda-de-ventas",
+    "name": "Mediana Agrandada XL (4 ingredientes)",
+    "slug": "promo-mediana-agrandada-xl-1",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 499,
+    "currency": "USD",
+    "imageUrl": "/images/promo-mediana-agrandada-xl-1.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "promo3",
+    "branchId": "tienda-de-ventas",
+    "name": "Combo Buenazooo!! (4 medianas + 2 Pepsi + pan de ajo)",
+    "slug": "promo-buenazooo-4medianas",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 1999,
+    "currency": "USD",
+    "imageUrl": "/images/promo-buenazooo-4medianas.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "promo4",
+    "branchId": "tienda-de-ventas",
+    "name": "Mediana Agrandada XL (varios sabores)",
+    "slug": "promo-mediana-agrandada-xl-2",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 1999,
+    "currency": "USD",
+    "imageUrl": "/images/promo-mediana-agrandada-xl-2.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "promo5",
+    "branchId": "tienda-de-ventas",
+    "name": "2 Medianas XL (32cm) \u2013 4 ingredientes",
+    "slug": "promo-2x-mediana-xl",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 999,
+    "currency": "USD",
+    "imageUrl": "/images/promo-2x-mediana-xl.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "promo6",
+    "branchId": "tienda-de-ventas",
+    "name": "Mediana Especial (25cm) + Pepsi 1L",
+    "slug": "promo-mediana-especial",
+    "description": "Promoci\u00f3n destacada",
+    "priceCents": 799,
+    "currency": "USD",
+    "imageUrl": "/images/promo-mediana-especial.webp",
+    "isActive": true,
+    "category": "Promociones"
+  },
+  {
+    "id": "pz1",
+    "branchId": "tienda-de-ventas",
+    "name": "Pizza Margarita",
+    "slug": "pizza-margarita",
+    "description": "Tomate, mozzarella, albahaca fresca",
+    "priceCents": 899,
+    "currency": "USD",
+    "imageUrl": "/images/margarita.png",
+    "isActive": true,
+    "category": "Pizzas"
+  },
+  {
+    "id": "pz2",
+    "branchId": "tienda-de-ventas",
+    "name": "Pepperoni",
+    "slug": "pepperoni",
+    "description": "Queso y pepperoni crujiente",
+    "priceCents": 1099,
+    "currency": "USD",
+    "imageUrl": "/images/pepperoni.png",
+    "isActive": true,
+    "category": "Pizzas"
+  }
+]
