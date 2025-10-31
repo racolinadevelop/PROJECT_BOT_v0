@@ -1,9 +1,10 @@
-// lib/types.ts
+// /lib/types.ts
 export type Currency = 'USD' | 'EUR' | 'MXN' | string;
 
+/* ===== PRODUCTO BASE ===== */
 export interface Product {
   id: string;
-  slug: string;                 // ← importante para la página /[slug]
+  slug: string;
   name: string;
   description?: string;
   imageUrl?: string;
@@ -12,6 +13,7 @@ export interface Product {
   category?: string;
 }
 
+/* ===== OPCIONES ===== */
 export interface OptionItem {
   id: string;
   name: string;
@@ -21,7 +23,7 @@ export interface OptionItem {
 export interface OptionGroup {
   id: string;
   title: string;
-  type: 'stepper';
+  type?: 'stepper' | 'checkbox';
   min?: number;
   max?: number;
   freeMax?: number;
@@ -32,21 +34,41 @@ export interface ProductWithOptions extends Product {
   optionGroups?: OptionGroup[];
 }
 
-export interface CartItem {
-  productId: string;
+/* ===== CARRITO ===== */
+export interface CartSelectionItem {
+  id: string;
   name: string;
   qty: number;
-  unitPriceCents: number;
-  currency: Currency;
-  imageUrl?: string;
-  description?: string;
-  selections?: {
-    groupId: string;
-    items: { id: string; name: string; qty: number; unitPriceCents?: number }[];
-  }[];
-  note?: string;
-  // opcional: si quieres reabrir con reglas desde el carrito
-  slug?: string;
-  options?: Record<string, string>;
+  price?: number;
+  type?: 'ingredient' | 'extra';
 }
 
+export interface CartSelection {
+  groupId: string;
+  groupTitle?: string;
+  category?: 'ingredient' | 'extra';
+  items: CartSelectionItem[];
+}
+
+export interface CartItem {
+  productId: string;
+  slug: string;
+  name: string;
+  imageUrl?: string;
+  unitPriceCents: number;
+  currency: Currency;
+  qty: number;
+  selections?: CartSelection[];
+  note?: string;
+}
+
+export interface CartState {
+  items: CartItem[];
+  totalCents: () => number;
+}
+
+export interface AddToCartPayload {
+  product: Pick<Product, 'id' | 'slug' | 'name' | 'imageUrl' | 'priceCents' | 'currency'>;
+  qty: number;
+  selections?: CartSelection[];
+}

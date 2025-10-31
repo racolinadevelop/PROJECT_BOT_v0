@@ -1,210 +1,248 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Minus, Plus } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { useCart } from '@/store/cart';
 import { formatMoney } from '@/lib/currency';
-import type { Currency, OptionGroup, ProductWithOptions } from '@/lib/types';
+import type {
+  ProductWithOptions,
+  CartSelection,
+  CartSelectionItem,
+  OptionGroup,
+} from '@/lib/types';
 
-export default function ProductConfigurator({ product }: { product: ProductWithOptions }) {
+type Props = { product: ProductWithOptions };
+
+export default function ProductConfigurator({ product }: Props) {
   const router = useRouter();
   const { add } = useCart();
 
-  // Reglas de opciones vienen dentro del propio producto (products.json)
-  const groups: OptionGroup[] = useMemo(() => product.optionGroups ?? [], [product]);
-
+  const groups: OptionGroup[] = product.optionGroups ?? [];
   const [qty, setQty] = useState(1);
-  const [note, setNote] = useState('');
+  /** picked[groupId][itemId] = cantidad */
+  const [picked, setPicked] = useState<Record<string, Record<string, number>>>({});
 
-  // picked[groupId][itemId] = cantidad
-  const [picked, setPicked] = useState<Record<string, Record<string, number>>>(() => {
-    const start: Record<string, Record<string, number>> = {};
-    groups.forEach((g) => {
-      start[g.id] = {};
-      g.items.forEach((it) => (start[g.id][it.id] = 0));
-    });
-    return start;
-  });
+  const inc = (gid: string, iid: string) =>
+    setPicked((p) => ({ ...p, [gid]: { ...(p[gid] ?? {}), [iid]: (p[gid]?.[iid] ?? 0) + 1 } }));
 
-  const groupTotals = useMemo(() => {
-    const totals: Record<string, number> = {};
-    groups.forEach((g) => {
-      totals[g.id] = Object.values(picked[g.id] ?? {}).reduce((a, n) => a + (n || 0), 0);
-    });
-    return totals;
+  const dec = (gid: string, iid: string) =>
+    setPicked((p) => ({
+      ...p,
+      [gid]: { ...(p[gid] ?? {}), [iid]: Math.max(0, (p[gid]?.[iid] ?? 0) - 1) },
+    }));
+
+  const countInGroup = (gid: string) =>
+    Object.values(picked[gid] ?? {}).reduce((a, b) => a + b, 0);
+
+  /** extras a cobrar respetando freeMax (gratis los más baratos) */
+  const extrasCents = useMemo(() => {
+    let sum = 0;
+    for (const g of groups) {
+      const map = picked[g.id] ?? {};
+      const freeMax = g.freeMax ?? 0;
+
+      const selected = g.items
+        .map((it) => ({ qty: map[it.id] ?? 0, price: it.unitPriceCents ?? 0 }))
+        .filter((r) => r.qty > 0)
+        .sort((a, b) => a.price - b.price); // primero gratis los baratos
+
+      let remainingFree = freeMax;
+      for (const r of selected) {
+        const freeHere = Math.min(remainingFree, r.qty);
+        const paid = r.qty - freeHere;
+        sum += paid * r.price;
+        remainingFree -= freeHere;
+      }
+    }
+    return sum;
   }, [picked, groups]);
 
-  const unitFinal = product.priceCents; // extras gratis en esta demo
-  const totalCents = unitFinal * qty;
+  /** Construye selections para el carrito con tipo ingredient/extra */
+  const buildSelections = (): CartSelection[] => {
+    const selections: CartSelection[] = [];
 
-  const inc = (g: OptionGroup, itemId: string) => {
-    setPicked((prev) => {
-      const next = structuredClone(prev);
-      const sum = Object.values(next[g.id] ?? {}).reduce((a, n) => a + (n || 0), 0);
-      if (g.max != null && sum >= g.max) return prev;
-      next[g.id][itemId] = (next[g.id][itemId] || 0) + 1;
-      return next;
-    });
+    for (const g of groups) {
+      const map = picked[g.id] ?? {};
+      const items = g.items
+        .map((it) => {
+          const n = map[it.id] ?? 0;
+          if (n <= 0) return null;
+          const type: CartSelectionItem['type'] =
+            g.title.toLowerCase().includes('agrega') ||
+            g.title.toLowerCase().includes('extra')
+              ? 'extra'
+              : 'ingredient';
+          return { id: it.id, name: it.name, qty: n, price: it.unitPriceCents ?? 0, type };
+        })
+        .filter(Boolean) as CartSelectionItem[];
+
+      if (items.length > 0) {
+        const category: CartSelection['category'] =
+          g.title.toLowerCase().includes('agrega') ||
+          g.title.toLowerCase().includes('extra')
+            ? 'extra'
+            : 'ingredient';
+        selections.push({ groupId: g.id, groupTitle: g.title, category, items });
+      }
+    }
+    return selections;
   };
 
-  const dec = (g: OptionGroup, itemId: string) => {
-    setPicked((prev) => {
-      const next = structuredClone(prev);
-      next[g.id][itemId] = Math.max(0, (next[g.id][itemId] || 0) - 1);
-      return next;
-    });
-  };
+  /** Validación min/max por grupo */
+  const groupErrors = useMemo(() => {
+    const errors: Record<string, string | null> = {};
+    for (const g of groups) {
+      const total = countInGroup(g.id);
+      const min = g.min ?? 0;
+      const max = g.max ?? Infinity;
+      if (total < min) errors[g.id] = `Selecciona al menos ${min}`;
+      else if (total > max) errors[g.id] = `Máximo ${g.max}`;
+      else errors[g.id] = null;
+    }
+    return errors;
+  }, [picked, groups]);
 
-  const canAdd =
-    groups.every((g) => (g.min ?? 0) <= (groupTotals[g.id] ?? 0)) && qty > 0;
+  const isValid = Object.values(groupErrors).every((e) => e === null);
 
-  const addToCart = () => {
-    if (!canAdd) return;
-
-    const selections = groups
-      .map((g) => ({
-        groupId: g.id,
-        items: g.items
-          .map((it) => ({
-            id: it.id,
-            name: it.name,
-            qty: picked[g.id]?.[it.id] || 0,
-            unitPriceCents: it.unitPriceCents ?? 0,
-          }))
-          .filter((x) => x.qty > 0),
-      }))
-      .filter((s) => s.items.length > 0);
-
-    const currency = (product.currency as Currency) ?? 'USD';
+  const handleAdd = () => {
+    if (!isValid) return;
 
     add({
       productId: product.id,
-      name: product.name,
-      qty,
-      unitPriceCents: unitFinal,
-      currency,
-      imageUrl: product.imageUrl,
-      description: product.description,
-      selections,
-      note: note?.trim() || undefined,
       slug: product.slug,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      unitPriceCents: product.priceCents + extrasCents,
+      currency: product.currency,
+      qty,
+      selections: buildSelections(),
     });
 
-    // Volver al catálogo después de agregar
-    router.push('/tienda-de-ventas'); // o router.back() si prefieres regresar a la página anterior
+    // volver al catálogo
+    router.back();
   };
 
   return (
-    <div className="mt-4 space-y-6">
-      {/* Cantidad + precio */}
-      <div className="flex items-center gap-3">
-        <button
-          className="w-10 h-10 rounded-lg bg-red-500 text-white flex items-center justify-center"
-          onClick={() => setQty(Math.max(1, qty - 1))}
-          aria-label="Restar"
-        >
-          <Minus className="w-4 h-4" />
-        </button>
+    <div className="mx-auto max-w-6xl p-4 md:p-6">
+      {/* Volver */}
+      <Link
+        href="/tienda-de-ventas"
+        className="inline-flex items-center text-sm text-neutral-600 hover:underline"
+      >
+        ← Volver al catálogo
+      </Link>
 
-        <div className="w-14 h-10 rounded-lg border flex items-center justify-center">
-          {qty}
+      <div className="mt-4 grid gap-6 md:gap-8 lg:grid-cols-2">
+        {/* Imagen */}
+        <div>
+          {product.imageUrl && (
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              width={800}
+              height={800}
+              className="rounded-xl w-full h-auto object-contain"
+              priority
+            />
+          )}
         </div>
 
-        <button
-          className="w-10 h-10 rounded-lg bg-green-600 text-white flex items-center justify-center"
-          onClick={() => setQty(qty + 1)}
-          aria-label="Sumar"
-        >
-          <Plus className="w-4 h-4" />
-        </button>
+        {/* Configuración */}
+        <div>
+          <h1 className="text-2xl md:text-3xl font-semibold leading-snug">{product.name}</h1>
+          {product.description && (
+            <p className="mt-1 text-sm text-neutral-500">{product.description}</p>
+          )}
 
-        <div className="ml-auto text-lg font-semibold">
-          {formatMoney(totalCents, product.currency)}
-        </div>
-      </div>
-
-      {/* Grupos de opciones */}
-      {groups.map((g) => (
-        <div key={g.id} className="space-y-2">
-          <div className="flex items-end justify-between">
-            <h3 className="font-semibold">{g.title}</h3>
-            <span className="text-xs opacity-70">
-              {g.min ? `Min ${g.min}` : null}
-              {g.min && g.max ? ' · ' : ''}
-              {g.max ? `Max ${g.max}` : null}
-            </span>
+          {/* Cantidad */}
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              className="w-9 h-9 rounded-md border"
+              aria-label="Disminuir cantidad"
+            >
+              −
+            </button>
+            <span className="min-w-[2ch] text-center">{qty}</span>
+            <button
+              onClick={() => setQty((q) => q + 1)}
+              className="w-9 h-9 rounded-md border"
+              aria-label="Aumentar cantidad"
+            >
+              +
+            </button>
           </div>
 
-          <div className="rounded-xl border divide-y">
-            {g.items.map((it) => {
-              const q = picked[g.id]?.[it.id] || 0;
-              const disabledPlus =
-                g.max != null && (groupTotals[g.id] ?? 0) >= g.max;
+          {/* Grupos */}
+          <div className="mt-6 space-y-6">
+            {groups.map((g) => {
+              const total = countInGroup(g.id);
+              const min = g.min ?? 0;
+              const max = g.max ?? Infinity;
+              const freeMax = g.freeMax ?? 0;
+              const error = groupErrors[g.id];
+
               return (
-                <div
-                  key={it.id}
-                  className="flex items-center justify-between p-3"
-                >
-                  <div className="min-w-0">
-                    <p className="font-medium">{it.name}</p>
-                    {g.freeMax ? (
-                      <p className="text-xs opacity-70">
-                        Gratis hasta {g.freeMax}
+                <section key={g.id}>
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <h3 className="font-medium">{g.title}</h3>
+                      <p className="text-xs text-neutral-500">
+                        Min {min} · Max {Number.isFinite(max) ? max : '—'}
+                        {freeMax > 0 && ` · ${freeMax} gratis`}
                       </p>
-                    ) : null}
+                    </div>
+                    <span className="text-xs text-neutral-500">Seleccionados: {total}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="w-9 h-9 rounded-full border flex items-center justify-center"
-                      onClick={() => dec(g, it.id)}
-                      aria-label={`Quitar ${it.name}`}
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-6 text-center">{q}</span>
-                    <button
-                      className="w-9 h-9 rounded-full border flex items-center justify-center disabled:opacity-40"
-                      onClick={() => inc(g, it.id)}
-                      disabled={disabledPlus}
-                      aria-label={`Agregar ${it.name}`}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
+
+                  <div className="mt-2 space-y-2">
+                    {g.items.map((it) => {
+                      const n = picked[g.id]?.[it.id] ?? 0;
+                      return (
+                        <div key={it.id} className="flex items-center justify-between">
+                          <span className="truncate">{it.name}</span>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => dec(g.id, it.id)}
+                              className="w-7 h-7 rounded-md border"
+                              aria-label={`Quitar ${it.name}`}
+                            >
+                              −
+                            </button>
+                            <span className="w-4 text-center">{n}</span>
+                            <button
+                              onClick={() => inc(g.id, it.id)}
+                              className="w-7 h-7 rounded-md border"
+                              aria-label={`Agregar ${it.name}`}
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </div>
+
+                  {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+                </section>
               );
             })}
           </div>
 
-          {g.min && (groupTotals[g.id] ?? 0) < g.min && (
-            <p className="text-xs text-red-600">
-              Selecciona al menos {g.min} opciones.
-            </p>
-          )}
+          {/* Botón */}
+          <button
+            onClick={handleAdd}
+            disabled={!isValid}
+            className="mt-8 w-full h-11 rounded-xl font-semibold text-white disabled:opacity-50
+                       bg-neutral-900 hover:opacity-90"
+          >
+            Agregar a la orden —{' '}
+            {formatMoney(product.priceCents + extrasCents, product.currency)}
+          </button>
         </div>
-      ))}
-
-      {/* Nota */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Instrucciones especiales</label>
-        <textarea
-          className="w-full min-h-[80px] rounded-xl border p-3"
-          placeholder="Ej: sin orégano, cortar en 8"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        />
       </div>
-
-      {/* CTA */}
-      <button
-        className="w-full rounded-xl bg-black text-white dark:bg-white dark:text-black py-3 font-semibold disabled:opacity-50"
-        disabled={!canAdd}
-        onClick={addToCart}
-      >
-        Agregar a la orden
-      </button>
     </div>
   );
 }
-

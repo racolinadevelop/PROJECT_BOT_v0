@@ -1,57 +1,54 @@
 'use client';
 
 import Image from 'next/image';
-import { formatMoney } from '@/lib/currency';
-import type { Product } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
+import { formatMoney } from '@/lib/currency';
+import { ProductWithOptions as Product } from '@/lib/types';
+
+const BASE_PATH = '/tienda-de-ventas'; // ajusta si tu catálogo vive en otra ruta
 
 export default function ProductListItem({ product }: { product: Product }) {
   const router = useRouter();
 
-  const goToConfigurator = () => {
-    router.push(`/tienda-de-ventas/${product.slug}`);
-  };
-
   return (
-    <div
-      className="flex items-center gap-4 p-3 sm:p-4 border rounded-2xl bg-white dark:bg-zinc-900 hover:shadow-md transition-all
-                 min-h-[88px]"
-    >
-      {/* Imagen fija para cards consistentes */}
+    <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 p-3 flex items-center gap-3 bg-white dark:bg-neutral-900">
+      {/* Imagen */}
       {product.imageUrl && (
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
+        <div className="relative w-20 h-20 overflow-hidden rounded-xl flex-shrink-0">
           <Image
             src={product.imageUrl}
             alt={product.name}
             fill
-            className="object-cover rounded-xl"
+            className="object-cover"
+            sizes="80px"
           />
         </div>
       )}
 
       {/* Info */}
       <div className="min-w-0 flex-1">
-        <h3 className="text-sm sm:text-base font-semibold truncate">{product.name}</h3>
+        <h3 className="font-semibold text-[15px] leading-tight truncate">
+          {product.name}
+        </h3>
         {product.description && (
-          <p className="text-xs sm:text-sm opacity-70 line-clamp-1">
+          <p className="text-xs text-neutral-500 line-clamp-1">
             {product.description}
           </p>
         )}
-        <div className="mt-1 font-semibold text-sm sm:text-base">
+        <p className="mt-1 text-sm font-semibold">
           {formatMoney(product.priceCents, product.currency)}
-        </div>
+        </p>
       </div>
 
-      {/* Botón “+” UNIFORME (siempre mismo tamaño/posición) */}
+      {/* Botón + (tamaño uniforme) */}
       <button
-        onClick={goToConfigurator}
-        className="ml-auto flex-shrink-0 inline-flex items-center justify-center
-                   rounded-full bg-black text-white hover:bg-zinc-700
-                   w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 transition-colors"
-        aria-label="Configurar producto"
+        onClick={() => router.push(`${BASE_PATH}/${product.slug}`)}
+        className="h-11 w-11 grid place-items-center rounded-full bg-neutral-900 text-white hover:opacity-90 transition flex-shrink-0"
+        aria-label="Configurar y agregar"
+        title="Configurar y agregar"
       >
-        <Plus className="w-5 h-5 md:w-6 md:h-6" />
+        <Plus className="h-6 w-6" />
       </button>
     </div>
   );
